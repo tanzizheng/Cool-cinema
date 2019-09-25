@@ -1,91 +1,106 @@
 <template>
-    <div class="city_body">
-        <div class="city_list">
-            <div class="city_hot">
-                <h2>热门城市</h2>
-                <ul class="clearfix">
-                    <li>上海</li>
-                    <li>北京</li>
-                    <li>上海</li>
-                    <li>北京</li>
-                    <li>上海</li>
-                    <li>北京</li>
-                    <li>上海</li>
-                    <li>北京</li>
-                </ul>
-            </div>
-            <div class="city_sort">
-                <div>
-                    <h2>A</h2>
-                    <ul>
-                        <li>阿拉善盟</li>
-                        <li>鞍山</li>
-                        <li>安庆</li>
-                        <li>安阳</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>B</h2>
-                    <ul>
-                        <li>北京</li>
-                        <li>保定</li>
-                        <li>蚌埠</li>
-                        <li>包头</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>A</h2>
-                    <ul>
-                        <li>阿拉善盟</li>
-                        <li>鞍山</li>
-                        <li>安庆</li>
-                        <li>安阳</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>B</h2>
-                    <ul>
-                        <li>北京</li>
-                        <li>保定</li>
-                        <li>蚌埠</li>
-                        <li>包头</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>A</h2>
-                    <ul>
-                        <li>阿拉善盟</li>
-                        <li>鞍山</li>
-                        <li>安庆</li>
-                        <li>安阳</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>B</h2>
-                    <ul>
-                        <li>北京</li>
-                        <li>保定</li>
-                        <li>蚌埠</li>
-                        <li>包头</li>
-                    </ul>
-                </div>	
-            </div>
-        </div>
-        <div class="city_index">
-            <ul>
-                <li>A</li>
-                <li>B</li>
-                <li>C</li>
-                <li>D</li>
-                <li>E</li>
-            </ul>
-        </div>
-    </div>  
+<div class="city_body">
+  <div class="city_list">
+      <div class="city_hot">
+          <h2>热门城市</h2>
+          <ul class="clearfix">
+              <li v-for="item in hotList" :key="item.id">{{item.nm}}</li>
+          </ul>
+      </div>
+      <div class="city_sort">
+          <div v-for="item in cityList" :key="item.index">
+              
+          </div>
+      </div>
+  </div>
+</div>
 </template>
 
 <script>
 export default {
-    name:'City'
+    name:'City',
+    //数据响应
+    data(){
+        return{
+            //定义空数组接收返回的数据
+            cityList:[],
+            hotList:[]
+        }
+    },
+    mounted(){//生命周期函数
+        this.axios.get('/api/cityList').then((res)=>{
+            var msg=res.data.msg;
+            if(msg==='ok'){
+                //得到城市数组数据
+                var cities=res.data.data.cities;                
+                // this.formatCitylist(cities);
+                //解析返回的数据
+                var {cityList,hotList}=this.formatCitylist(cities);
+                //把解析到的数据赋值给data数组
+                this.cityList=cityList;
+                this.hotList=hotList;
+            }
+        });
+    },
+    methods:{
+        formatCitylist (cities) {
+            var cityList=[];   //城市分类
+            var hotList=[];    //用来存放热门城市
+            for(var i=0;i<cities.length;i++){//循环传过来的数组
+                //得到热门城市的首字母大写
+                var firstLetter = cities[i].py.substring(0,1).toUpperCase();
+                //找到第一个字母之后进行一个个对比
+                if(toCom(firstLetter)){//如果数组中的i下标位置还没有值的话(数组空的)
+                    cityList.push({
+                        //赋值到空数组里面去
+                        index:firstLetter,
+                        list:[
+                            {
+                                nm:cities[i].nm,
+                                id:cities[i].id
+                            }
+                        ]
+                    });
+                }else{//如果i下表位置已经有值存在则累加到后面
+                    for(var j=0;j<cityList.length;j++){
+                        if(cityList[j].index===firstLetter){
+                            cityList[j].list.push({nm:cities[i].nm,id:cities[i].id});
+                        }
+                    }
+                }
+            }
+            //把城市A到Z顺序排序(原生数组排序法)
+            cityList.sort((n1,n2)=>{
+                //若 a 大于 b，在排序后的数组中 a 应该出现在 b 之后，则返回一个大于 0 的值
+                if(n1.index>n2.index){
+                    return 1;
+                }
+                //若 a 小于 b，在排序后的数组中 a 应该出现在 b 之前，则返回一个小于 0 的值
+                else if(n1.index<n2.index){
+                    return -1;
+                }
+            });
+            function toCom(firstLetter) {
+                for(var i=0;i<cityList.length;i++){
+                    if(cityList[i].index===firstLetter){//如果值相等(已存在)
+                        return false;
+                    }
+                }
+                return true;//表示还是空的
+            }
+            //取热门城市
+            for(var i=0;i<cities.length;i++){
+                if(cities[i].isHot===1){//1代表是热门城市
+                    hotList.push(cities[i]);
+                }
+            }
+            return{
+                //把结果返回出去
+                cityList,
+                hotList
+            }
+        }
+    }
 }
 </script>
 <style scoped>
