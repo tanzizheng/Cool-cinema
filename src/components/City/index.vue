@@ -1,3 +1,4 @@
+
 <template>
 <div class="city_body">
   <div class="city_list">
@@ -7,11 +8,25 @@
               <li v-for="item in hotList" :key="item.id">{{item.nm}}</li>
           </ul>
       </div>
-      <div class="city_sort">
+      <!-- 定义ref属性为获得h2的元素 -->
+      <div class="city_sort" ref="city_sort">
+          <!-- 遍历所有城市 -->
           <div v-for="item in cityList" :key="item.index">
-              
+              <!-- 城市首字母 -->
+              <h2>{{item.index}}</h2>
+              <ul>
+                  <!-- 城市名 -->
+                  <li v-for="itemList in item.list" :key="itemList.id">{{itemList.nm}}</li>
+              </ul>
           </div>
       </div>
+  </div>
+  <div class="city_index">
+      <ul>
+          <!-- 右侧城市首字母排序 -->
+          <!-- index代表下标                                     @touchstart触摸事件      -->
+          <li v-for="(item,index) in cityList" :key="item.index" @touchstart="handleToIndex(index)">{{item.index}}</li>
+      </ul>
   </div>
 </div>
 </template>
@@ -43,6 +58,7 @@ export default {
         });
     },
     methods:{
+        // 渲染城市模块
         formatCitylist (cities) {
             var cityList=[];   //城市分类
             var hotList=[];    //用来存放热门城市
@@ -61,7 +77,7 @@ export default {
                             }
                         ]
                     });
-                }else{//如果i下表位置已经有值存在则累加到后面
+                }else{//如果i下表位置已经有值存在则累加到后面(城市中首字母相同时)
                     for(var j=0;j<cityList.length;j++){
                         if(cityList[j].index===firstLetter){
                             cityList[j].list.push({nm:cities[i].nm,id:cities[i].id});
@@ -99,6 +115,13 @@ export default {
                 cityList,
                 hotList
             }
+        },
+        //智能响应功能
+        handleToIndex(index){
+            // 取得h2元素
+            var h2=this.$refs.city_sort.getElementsByTagName('h2');
+            // 找到点击的定位的元素的坐标给其父元素,做定位
+            this.$refs.city_sort.parentNode.scrollTop=h2[index].offsetTop;
         }
     }
 }
