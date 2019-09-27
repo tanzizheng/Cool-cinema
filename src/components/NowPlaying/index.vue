@@ -1,13 +1,14 @@
 <template>
   <div class="movie_body">
     <ul>
-        <li>
-            <div class="pic_show"><img src="../../../public/images/movie_2.jpg"></div>
+        <li v-for="item in movieList" :key="item.id" > <!--电影id做标识-->
+            <div class="pic_show"><img :src="item.img | setWH('128.180')"></div>
             <div class="info_list">
-                <h2>毒液：致命守护者</h2>
-                <p>观众评 <span class="grade">9.3</span></p>
-                <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-                <p>今天56家影院放映443场</p>
+<!--                有version值的就加上图片-->
+                <h2>{{item.nm}} <img v-if="item.version" src="@/assets/maxs.png"> </h2>
+                <p>观众评 <span class="grade">{{item.sc}}</span></p>
+                <p>主演：{{item.star}}</p>
+                <p>{{item.showInfo}}</p>
             </div>
             <div class="btn_mall">
                 购票
@@ -21,13 +22,18 @@
 export default {
     name:'NowPlaying',
     data(){
-        
+        return{
+            movieList:[]
+        }
     },
+    //获取电影列表,正在热映
     mounted(){
+        //发送获取数据请求
         this.axios.get('/api/movieOnInfoList?cityId=10').then((res)=>{
             var msg=res.data.msg;
-            if(msg==='ok'){
-
+            if(msg==='ok'){//成功则
+                //赋值到空数组里面保存
+                this.movieList=res.data.data.movieList;
             }
         })
     }
