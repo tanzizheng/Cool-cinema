@@ -1,0 +1,18 @@
+1，项目中主路由创建文件夹，这样以后就算路由很多也不会乱
+2，做项目过程中可以先在主模块加个keep-alive标签，在第一次请求渲染后先缓存下来，再次切换标签的时候可以用keep-alive来缓存作用，以提高性能
+3.跨域问题，要做反响代理
+scrollLeft 设置元素中滚动条的垂直偏移
+offsetTop：获取对象相对于由offsetParent属性指定的父坐标(css定位的元素或body元素)距离顶端的高度。
+4，过滤器filter
+
+问题与难点
+	5，异步，搜索按钮，计算属性，得到当前message对应数据，但在当前计算属性中不适合做异步操作
+决解办法
+	5，watch监听，得到数据相应变化，然后触发对应的方法，然后可以监听到一个新的值的变化，这样在watch中是可以允许做异步操作的
+@touchstart触摸事件
+offsetTop：元素到offsetParent顶部的距离
+parentNode元素父节点
+
+
+npm i -S mongoose   //安装mongoose
+npm i -S nodemailer   //邮箱插件
