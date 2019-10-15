@@ -1,6 +1,6 @@
 <template>
-  <div id="main">
-      <Header title="上映影院"/>
+    <div id="main">
+        <Header title="本地影院" />
         <div id="content">
             <div class="cinema_menu">
 				<div class="city_switch">
@@ -13,10 +13,10 @@
 					特色 <i class="iconfont icon-lower-triangle"></i>
 				</div>
 			</div>
-            <CiList/>
+            <CiList />
         </div>
-      <tabBar/>
-  </div>
+        <TabBar />
+    </div>
 </template>
 
 <script>
@@ -25,8 +25,8 @@ import TabBar from '@/components/TabBar';
 import CiList from '@/components/CiList';
 
 export default {
-    name:'Cinema',
-    components:{
+    name : 'Cinema',
+    components : {
         Header,
         TabBar,
         CiList

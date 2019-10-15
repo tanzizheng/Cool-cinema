@@ -1,11 +1,13 @@
-﻿// 1引入数据库插件
+﻿
 var mongoose = require('mongoose');
-// 链接数据库
+var nodemailer = require('nodemailer');
+
 var Mongoose = {
-	// url : 'mongodb://localhost:27017/gg',
+	url : 'mongodb://localhost:27017/gg',
 	connect(){
-		mongoose.connect('mongodb://127.0.0.1:27017/gg' ,{useNewUrlParser: true,useUnifiedTopology: true }, (err)=>{
+		mongoose.connect(this.url ,{useNewUrlParser: true,useUnifiedTopology: true }, (err)=>{
 			if(err){
+				
 				console.log('数据库连接失败');
 				return;
 			}
@@ -13,7 +15,34 @@ var Mongoose = {
 		});
 	}
 };
-// 导出数据库
+
+var Email = {
+	config : {
+		host: "smtp.qq.com",
+	    port: 587,
+	    auth: {
+		  user: '15856027@qq.com',
+		  pass: 'ekmlkkltlkwecbag'
+		  
+	    }
+	},
+	get transporter(){
+		return nodemailer.createTransport(this.config);
+	},
+	get verify(){
+		return Math.random().toString().substring(2,6);
+	},
+	get time(){
+		return Date.now();
+	}
+};
+
+var Head = {
+	baseUrl : 'http://localhost:3000/uploads/'
+}
+
 module.exports = {
 	Mongoose,
+	Email,
+	Head
 };

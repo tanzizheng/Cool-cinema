@@ -1,11 +1,11 @@
 <template>
-  <div id="main">
-      <Header title="个人中心"/>
-      <div id="content">
-        <Login/>
-      </div>
-      <tabBar/>
-  </div>
+    <div id="main">
+        <Header title="midy" />
+        <div id="content">
+            <router-view />
+        </div>
+        <TabBar />
+    </div>
 </template>
 
 <script>
@@ -14,8 +14,8 @@ import TabBar from '@/components/TabBar';
 import Login from '@/components/Login';
 
 export default {
-    name:'Mine',
-    components:{
+    name : 'Mine',
+    components : {
         Header,
         TabBar,
         Login

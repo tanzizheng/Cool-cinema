@@ -1,4 +1,4 @@
-export default{
-    path:'/cinema',
-    component:()=>import('@/views/Cinema')
+export default {
+    path : '/cinema',
+    component : () => import('@/views/Cinema')
 }
